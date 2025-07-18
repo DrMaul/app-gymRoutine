@@ -1,0 +1,62 @@
+{
+  "pecho": [
+    {
+      "id": "ejercicio-pecho-1",
+      "nombre": "Press de banca plano",
+      "categoria": "pecho"
+    },
+    {
+      "id": "ejercicio-pecho-2",
+      "nombre": "Press inclinado con mancuernas",
+      "categoria": "pecho"
+    }
+  ],
+  "piernas": [
+    {
+      "id": "ejercicio-piernas-1",
+      "nombre": "Sentadilla libre",
+      "categoria": "piernas"
+    },
+    {
+      "id": "ejercicio-piernas-2",
+      "nombre": "Prensa de piernas",
+      "categoria": "piernas"
+    }
+  ],
+  "espalda": [
+    {
+      "id": "ejercicio-espalda-1",
+      "nombre": "Peso muerto",
+      "categoria": "espalda"
+    },
+    {
+      "id": "ejercicio-espalda-2",
+      "nombre": "Remo con barra",
+      "categoria": "espalda"
+    }
+  ],
+  "biceps": [
+    {
+      "id": "ejercicio-biceps-1",
+      "nombre": "Curl con barra",
+      "categoria": "biceps"
+    },
+    {
+      "id": "ejercicio-biceps-2",
+      "nombre": "Curl alternado con mancuernas",
+      "categoria": "biceps"
+    }
+  ],
+  "triceps": [
+    {
+      "id": "ejercicio-triceps-1",
+      "nombre": "Fondos en paralelas",
+      "categoria": "triceps"
+    },
+    {
+      "id": "ejercicio-triceps-2",
+      "nombre": "Extensión de tríceps en polea",
+      "categoria": "triceps"
+    }
+  ]
+}

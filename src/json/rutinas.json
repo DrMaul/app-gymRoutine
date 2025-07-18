@@ -1,0 +1,91 @@
+{"rutinas": [
+  {
+    "id": "rutina-1",
+    "nombre": "Hipertrofia Junio",
+    "fechaInicio": "2025-07-01",
+    "fechaFin": null,
+    "semanas": [
+      {
+        "id": "semana-1",
+        "orden": 1,
+        "dias": [
+          {
+            "id": "dia-1",
+            "nombre":"Dia pecho",
+            "orden": 1,
+            "diaAsignado":2,
+            "estado": "Pendiente",
+            "ejercicios": [
+              {
+                "id": "dia-1-ej1",
+                "ejercicio": {
+                  "id": "ejercicio-pecho-1",
+                  "nombre": "Press de banca plano",
+                  "categoria": "pecho"
+                },
+                "reps": 10,
+                "series": 4,
+                "peso": 60,
+                "orden": 1,
+                "completed": false
+              },
+              {
+                "id": "dia-1-ej2",
+                "ejercicio": {
+                  "id": "ejercicio-pecho-2",
+                  "nombre": "Press inclinado con mancuernas",
+                  "categoria": "pecho"
+                },
+                "reps": 12,
+                "series": 3,
+                "peso": 12,
+                "orden": 2,
+                "completed": false
+              }
+            ]
+          },
+          {
+            "id": "dia-2",
+            "nombre":"Piernas",
+            "orden": 2,
+            "diaAsignado":4,
+            "ejercicios": [
+              {
+                "id": "dia-2-ej1",
+                "ejercicio": {
+                  "id": "ejercicio-piernas-1",
+                  "nombre": "Sentadilla libre",
+                  "categoria": "piernas"
+                },
+                "reps": 8,
+                "series": 4,
+                "peso": 80,
+                "orden": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "semana-2",
+        "orden": 2,
+        "dias": []
+      },
+      {
+        "id": "semana-3",
+        "orden": 3,
+        "dias": []
+      },
+      {
+        "id": "semana-4",
+        "orden": 4,
+        "dias": []
+      },
+      {
+        "id": "semana-5",
+        "orden": 5,
+        "dias": []
+      }
+    ]
+  }
+]}
