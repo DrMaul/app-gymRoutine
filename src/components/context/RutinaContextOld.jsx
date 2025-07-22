@@ -1,32 +1,31 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import RutinasJSON from '../../json/rutinas.json';
 import Ejercicios from '../../json/ejercicios.json';
-import { getRutinas, getRutinaById, createRutina, updateRutina, deleteRutina } from '../../api/services/rutinaService';
-import { v4 as uuidv4 } from 'uuid';
 
 const RutinaContext = createContext();
 
 export const useRutinaContext = () => useContext(RutinaContext);
 
+const LOCAL_STORAGE_KEY = 'rutinas_storage';
+const LOCAL_STORAGE_TEMP = 'rutina_temp_progress';
+
 export const RutinaContextProvider = ({ children }) => {
-  const [rutinas, setRutinas] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const getRutinasIniciales = () => {
+    const guardadas = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return guardadas ? JSON.parse(guardadas) : RutinasJSON.rutinas;
+  };
 
-  useEffect(() => {
-    const cargarRutina = async () => {
-      setLoading(true);
-      try {
-        const data = await getRutinas();
-        setRutinas(data);
-      } catch (error) {
-        console.error('Error cargando rutina:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [rutinas, setRutinas] = useState(getRutinasIniciales);
+  const [rutinaTemporal, setRutinaTemporal] = useState(() => {
+    const temp = localStorage.getItem(LOCAL_STORAGE_TEMP);
+    return temp ? JSON.parse(temp) : {};
+  });
 
-    cargarRutina();
-  }, []);
+  const rutinasOrdenadas = [...rutinas].sort((a, b) => {
+    const fechaA = new Date(a.fechaInicio);
+    const fechaB = new Date(b.fechaInicio);
+    return fechaB - fechaA; // De más reciente a más antigua
+  });
 
   const [perfilActual, setPerfilActual] = useState('entrenador');
 
@@ -39,7 +38,7 @@ export const RutinaContextProvider = ({ children }) => {
 
   const [diaEnEdicion, setDiaEnEdicion] = useState(null);
 
-  const crearRutina = async (nombre, fecha) => {
+  const crearRutina = (nombre, fecha) => {
     if (rutinas.length >= 6) {
       alert('Máximo 6 rutinas');
       return;
@@ -67,46 +66,36 @@ export const RutinaContextProvider = ({ children }) => {
 
     // Cerrar rutina anterior (si está activa)
     if (rutinas.length > 0) {
-      const ultimaRutina = rutinas[rutinas.length - 1];
+      const rutinasActualizadas = [...rutinas];
+      const ultimaRutina = rutinasActualizadas[rutinas.length - 1];
 
       if (!ultimaRutina.fechaFin) {
         let fechaFinAnterior = new Date(fecha);
         fechaFinAnterior.setDate(fechaFinAnterior.getDate() - 1);
         let fechaFinAnteriorStr = dateString(fechaFinAnterior);
-        await updateRutina(ultimaRutina.id, { fechaFin: fechaFinAnteriorStr });
-
-        // actualizar en local
         ultimaRutina.fechaFin = fechaFinAnteriorStr;
+        setRutinas(rutinasActualizadas); // Guardamos esta actualización
       }
     }
 
+    const nuevoId = `rutina-${rutinas.length + 1}`;
+
+    const semanas = Array.from({ length: 5 }, (_, i) => ({
+      id: `semana-${i + 1}`,
+      orden: i + 1,
+      dias: []
+    }));
+
     const nuevaRutina = {
-      id: uuidv4(),
+      id: nuevoId,
       nombre,
       fechaInicio: fecha,
-      fechaFin: null
-    };
-
-    const rutinaCreada = await createRutina(nuevaRutina);
-
-    // Crear 5 semanas asociadas
-    const semanas = [];
-    for (let i = 1; i <= 5; i++) {
-      const semana = await crearSemanaDB({
-        id: uuidv4(),
-        orden: i,
-        rutina_id: rutinaCreada.id
-      });
-      semanas.push({ ...semana, dias: [] });
-    }
-
-    // Armar objeto completo para el contexto local
-    const rutinaCompleta = {
-      ...rutinaCreada,
+      fechaFin: null,
       semanas
     };
 
-    const nuevasRutinas = [...rutinas, rutinaCompleta];
+    const nuevasRutinas = [...rutinas, nuevaRutina];
+
     setRutinas(nuevasRutinas);
   };
 
@@ -376,6 +365,7 @@ export const RutinaContextProvider = ({ children }) => {
   };
 
   const progresoDiaActual = (rutinaId, semanaId, diaId) => {
+
     const rutinaSeleccionada = obtenerRutinaPorId(rutinaId);
     const semanaActual = obtenerSemanaPorId(rutinaId, semanaId);
     const diaActual = obtenerDiaPorId(rutinaId, semanaId, diaId);
@@ -399,8 +389,8 @@ export const RutinaContextProvider = ({ children }) => {
       dias: [diaActual]
     };
 
-    console.log('semanasHistoricas', semanasHistoricas);
-    console.log('semanaActualSimplificada', semanaActualSimplificada);
+    console.log("semanasHistoricas", semanasHistoricas)
+    console.log("semanaActualSimplificada", semanaActualSimplificada)
 
     return {
       ...rutinaSeleccionada,

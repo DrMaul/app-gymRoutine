@@ -1,10 +1,10 @@
 // AppRoutes.jsx
 import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./Home";
-import Calendar from "./Calendar";
+import Calendar from "../components/Calendar";
 import Routines from "./Routines";
-import Routine from "./Routine";
-import NotFound from "./NotFound";
+import Routine from "../components/Routine";
+import NotFound from "../components/NotFound";
 
 export default function Body() {
   const location = useLocation();
